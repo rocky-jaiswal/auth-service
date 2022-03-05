@@ -1,0 +1,49 @@
+version: "3"
+services:
+  db:
+    networks:
+      - appnet
+    build:
+      context: ./postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data:z
+  # auth-service:
+  #   networks:
+  #     - appnet
+  #   build:
+  #     context: ./auth-service
+  #     dockerfile: Dockerfile-dev
+  #   ports:
+  #     - "3001:3001"
+  #   volumes:
+  #     - ./auth-service:/app:z
+  #   environment:
+  #     NODE_ENV: development
+  #   command: "./run_dev.sh $SECRET"
+  #   depends_on:
+  #     - db
+  # client:
+  #   networks:
+  #     - appnet
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile-dev
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client:/app:z
+  #   environment:
+  #     NODE_ENV: development
+  #   command: "yarn dev"
+  #   depends_on:
+  #     - auth-service
+networks:
+  appnet:
+    driver: "bridge"
+volumes:
+  data:
+    driver: "local"
