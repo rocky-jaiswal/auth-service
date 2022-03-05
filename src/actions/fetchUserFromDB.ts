@@ -1,20 +1,31 @@
 import BadRequestError from '../errors/badRequestError'
+
 import CreateSessionState from '../handlers/sessions/create/createSessionState'
 import CreateUserState from '../handlers/users/create/createUserState'
+import GetUserState from '../handlers/users/get/getUserState'
+
 import db from '../repositories/db'
-import User from '../repositories/user'
+import UserRepository from '../repositories/userRepository'
 
 interface CheckType {
   shouldExist: boolean
+  findBy: 'email' | 'id'
 }
 
 const fetchUserFromDB =
-  (check: CheckType) => async (state: CreateUserState | CreateSessionState) => {
-    // TODO: DI for DB & User model creation
-    const user = await new User(db).findByEmail(state.email)
+  (check: CheckType) => async (state: CreateUserState | CreateSessionState | GetUserState) => {
+    let user
+
+    // TODO: DI for DB
+    if (check.findBy === 'email') {
+      user = await new UserRepository(db).findByEmail(state.email)
+    }
+    if (check.findBy === 'id') {
+      user = await new UserRepository(db).findById(state.userId)
+    }
 
     if (!check.shouldExist && user) {
-      throw new BadRequestError('Invalid create user request - user exists already')
+      throw new BadRequestError('Invalid user request - user exists already')
     }
 
     if (check.shouldExist && !user) {

@@ -1,14 +1,31 @@
+import { pipeAsync } from '@rockyj/async-utils'
 import { FastifyReply, FastifyRequest } from 'fastify'
+
+import BadRequestError from '../../../errors/badRequestError'
+import validateGetUserRequest from '../../../actions/validateGetUserRequest'
+import validateToken from '../../../actions/validateToken'
+import fetchUserFromDB from '../../../actions/fetchUserFromDB'
+import GetUserState from './getUserState'
 
 const getUser = async (request: FastifyRequest, response: FastifyReply) => {
   try {
-    // TODO: Extract user id somehow from token header, and query db for email by user id
-    response.send({})
+    const state = GetUserState.create(request.headers, request.log)
+
+    const updatedState = await pipeAsync<GetUserState>(
+      validateGetUserRequest,
+      validateToken,
+      fetchUserFromDB({ shouldExist: true, findBy: 'id' })
+    )(state)
+
+    response.send({ userId: updatedState.userId, email: updatedState.userEmail })
   } catch (err) {
     request.log.error('Error in user fetch')
     request.log.error({ err })
-    // TODO: Better error code
-    response.code(500).send({ error: 'error in get-user' })
+    if (err instanceof BadRequestError) {
+      response.code(400).send({ error: err.message })
+    } else {
+      response.code(500).send({ error: 'Error in create user' })
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import { Knex } from 'knex'
+import type { Knex } from 'knex'
 
 export const getTimeStamp = async (db: Knex) => {
   const date = await db.raw('select current_timestamp')

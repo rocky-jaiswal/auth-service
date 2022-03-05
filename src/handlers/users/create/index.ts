@@ -16,7 +16,7 @@ const createUser = async (request: FastifyRequest, response: FastifyReply) => {
 
     const updatedState = await pipeAsync<CreateUserState>(
       validateCreateUserRequest,
-      fetchUserFromDB({ shouldExist: false }),
+      fetchUserFromDB({ shouldExist: false, findBy: 'email' }),
       createUserInDB,
       createToken
     )(state)

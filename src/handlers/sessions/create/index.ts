@@ -15,7 +15,7 @@ const createSession = async (request: FastifyRequest, response: FastifyReply) =>
 
     const updatedState = await pipeAsync<CreateSessionState>(
       validateSessionCreateRequest,
-      fetchUserFromDB({ shouldExist: true }),
+      fetchUserFromDB({ shouldExist: true, findBy: 'email' }),
       comparePasswords,
       createToken
     )(state)
