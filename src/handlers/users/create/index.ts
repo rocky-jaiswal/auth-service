@@ -5,6 +5,7 @@ import CreateUserState from './createUserState'
 import BadRequestError from '../../../errors/badRequestError'
 
 import validateCreateUserRequest from '../../../actions/validateCreateUserRequest'
+import fetchUserFromDB from '../../../actions/fetchUserFromDB'
 import createUserInDB from '../../../actions/createUserInDB'
 import createToken from '../../../actions/createToken'
 
@@ -15,7 +16,7 @@ const createUser = async (request: FastifyRequest, response: FastifyReply) => {
 
     const updatedState = await pipeAsync<CreateUserState>(
       validateCreateUserRequest,
-      // TODO: What if user already exists in DB
+      fetchUserFromDB({ shouldExist: false }),
       createUserInDB,
       createToken
     )(state)
@@ -25,7 +26,7 @@ const createUser = async (request: FastifyRequest, response: FastifyReply) => {
     request.log.error('Error in user creation')
     request.log.error({ err })
     if (err instanceof BadRequestError) {
-      response.code(400).send({ error: 'Invalid request for create user' })
+      response.code(400).send({ error: err.message })
     } else {
       response.code(500).send({ error: 'Error in create user' })
     }

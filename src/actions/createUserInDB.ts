@@ -2,22 +2,17 @@ import bcrypt from 'bcrypt'
 
 import db from '../repositories/db'
 import User from '../repositories/user'
-
-interface HasUserCredentials {
-  email: string
-  password: string
-  userId?: string
-}
+import CreateUserState from '../handlers/users/create/createUserState'
 
 const SALT_ROUNDS = 10
 
-const createUserInDB = async (params: HasUserCredentials) => {
-  const encryptedPassword = await bcrypt.hash(params.password, SALT_ROUNDS)
+const createUserInDB = async (state: CreateUserState) => {
+  state.encryptedPassword = await bcrypt.hash(state.password, SALT_ROUNDS)
 
   // TODO: DI for DB
-  params.userId = await new User(db).createUser(params.email, encryptedPassword)
+  state.userId = await new User(db).createUser(state.email, state.encryptedPassword)
 
-  return params
+  return state
 }
 
 export default createUserInDB

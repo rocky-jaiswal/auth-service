@@ -1,18 +1,12 @@
+import CreateSessionState from '../handlers/sessions/create/createSessionState'
 import signJWT from '../services/signJWT'
 
-interface HasId {
-  email: string
-  password: string
-  createdUserId?: string
-  token?: string
-}
+const createToken = async (state: CreateSessionState) => {
+  const token = signJWT(state.userId!)
 
-const createToken = async (params: HasId) => {
-  const token = signJWT(params.createdUserId!!)
+  state.token = token
 
-  params.token = token
-
-  return params
+  return state
 }
 
 export default createToken

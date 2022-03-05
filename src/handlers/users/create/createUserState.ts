@@ -6,6 +6,7 @@ class CreateUserState {
   public readonly confirmedPassword?: string
 
   public userId?: string
+  public encryptedPassword?: string
   public token?: string
 
   public static create(requestBody: unknown) {
