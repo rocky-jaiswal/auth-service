@@ -13,7 +13,7 @@ const validateCreateUserRequest = async (state: CreateUserState) => {
       state.password.length < 6 ||
       state.password !== state.confirmedPassword
     ) {
-      throw new BadRequestError('Invalid create user request')
+      throw new BadRequestError('invalid create user request')
     }
 
     return state

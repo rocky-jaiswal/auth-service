@@ -11,11 +11,12 @@ const SALT_ROUNDS = 10
 const createUserInDB = async (state: CreateUserState): Promise<Either<Error, CreateUserState>> => {
   try {
     const encryptedPassword = await bcrypt.hash(state.password, SALT_ROUNDS)
-    state.user = await new UserRepository(db).createUser(state.email, encryptedPassword)
+    const user = await new UserRepository(db).createUser(state.email, encryptedPassword)
+    state.user = user
 
     return Right(state)
   } catch {
-    return Left(new ServerError('Server error'))
+    return Left(new ServerError('server error'))
   }
 }
 

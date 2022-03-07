@@ -12,7 +12,7 @@ const checkIfUserExists = async (state: CreateSessionState) => {
     user = await fetchUserByEmail(state.email)
   } catch (err) {
     // TODO: Log this error
-    return Left(new ServerError('Server error'))
+    return Left(new ServerError('server error'))
   }
 
   return Either.encase(() => {

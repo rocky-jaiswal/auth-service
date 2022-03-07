@@ -8,7 +8,7 @@ const comparePasswords = async (state: CreateSessionState) => {
   const result = await bcrypt.compare(state.password, state.user!.encryptedPassword!)
 
   if (!result) {
-    return Left(new BadRequestError('Bad credentials!'))
+    return Left(new BadRequestError('bad credentials!'))
   }
 
   return Right(state)

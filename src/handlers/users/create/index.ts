@@ -4,6 +4,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import CreateUserState from './createUserState'
 
 import { fetchUserByEmail } from '../../../services/fetchUserFromDB'
+import { sendErrorResponse } from '../../../services/sendResponse'
 import validateCreateUserRequest from '../../../actions/validateCreateUserRequest'
 import createUserInDB from '../../../actions/createUserInDB'
 import createToken from '../../../actions/createToken'
@@ -23,16 +24,18 @@ const createUser = async (request: FastifyRequest, response: FastifyReply) => {
       .run()
 
     state.caseOf({
-      Left: (err) => response.code(400).send({ error: err.message }),
+      Left: (err) => {
+        const res = sendErrorResponse(err)
+        response.code(res.code).send({ error: res.message })
+      },
       Right: (state) => {
         response.send({ token: state.token })
-        return {}
       },
     })
   } catch (err) {
-    request.log.error('Error in user creation')
+    request.log.error('error in user creation')
     request.log.error({ err })
-    response.code(500).send({ error: 'Error in create user' })
+    response.code(500).send({ error: 'error in create user' })
   }
 }
 

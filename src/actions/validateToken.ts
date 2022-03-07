@@ -12,7 +12,7 @@ const validateToken = async (state: GetUserState) => {
       return state
     } catch (err) {
       state.logger.error(err)
-      throw new BadRequestError('Invalid request - bad token')
+      throw new BadRequestError('invalid request - bad token')
     }
   })
 }

@@ -3,6 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 
 import CreateSessionState from './createSessionState'
 
+import { sendErrorResponse } from '../../../services/sendResponse'
 import validateSessionCreateRequest from '../../../actions/validateSessionCreateRequest'
 import checkIfUserExists from '../../../actions/checkIfUserExists'
 import comparePasswords from '../../../actions/comparePasswords'
@@ -18,16 +19,18 @@ const createSession = async (request: FastifyRequest, response: FastifyReply) =>
       .run()
 
     state.caseOf({
-      Left: (err) => response.code(400).send({ error: err.message }),
+      Left: (err) => {
+        const res = sendErrorResponse(err)
+        response.code(res.code).send({ error: res.message })
+      },
       Right: (state) => {
         response.send({ token: state.token })
-        return {}
       },
     })
   } catch (err) {
-    request.log.error('Error in session creation')
+    request.log.error('error in session creation')
     request.log.error({ err })
-    response.code(500).send({ error: 'Error in create session' })
+    response.code(500).send({ error: 'error in create session' })
   }
 }
 
