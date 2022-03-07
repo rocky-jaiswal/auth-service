@@ -1,4 +1,5 @@
-import { Knex } from 'knex'
+import type { Knex } from 'knex'
+import { Just, Nothing } from 'purify-ts'
 
 import User from '../models/user'
 
@@ -12,30 +13,32 @@ class UserRepository {
   }
 
   public async createUser(email: string, encryptedPassword: string) {
-    const userId = (await this.db(UserRepository.TABLE_NAME).returning('id').insert({
-      email: email,
-      encrypted_password: encryptedPassword,
-    })) as string
+    const user = (await this.db(UserRepository.TABLE_NAME)
+      .returning(['id', 'email', 'encrypted_password'])
+      .insert({
+        email: email,
+        encrypted_password: encryptedPassword,
+      })) as any[]
 
-    return userId
+    return User.create(user[0].id, user[0].email, user[0].encrypted_password)
   }
 
   public async findByEmail(email: string) {
     const user = await this.db(UserRepository.TABLE_NAME)
       .where({ email })
-      .select(['id', 'encrypted_password'])
+      .select(['id', 'email', 'encrypted_password'])
       .first()
 
-    return user ? User.create(user.id, user.email, user.encrypted_password) : null
+    return user ? Just(User.create(user.id, user.email, user.encrypted_password)) : Nothing
   }
 
   public async findById(id: string) {
     const user = await this.db(UserRepository.TABLE_NAME)
       .where({ id })
-      .select(['id', 'email'])
+      .select(['id', 'email', 'encrypted_password'])
       .first()
 
-    return user ? User.create(user.id, user.email, user.encrypted_password) : null
+    return user ? Just(User.create(user.id, user.email, user.encrypted_password)) : Nothing
   }
 }
 

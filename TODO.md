@@ -1,0 +1,33 @@
+# TODO
+
+- Code cleanup
+- HTTP tests needed
+  - Ping
+  - Create User
+    - No request body
+    - No email
+    - No password
+    - Bad email
+    - Bad password
+    - Password confirmation mismatch
+    - User already exists
+    - DB is down -> 500
+    - Success
+  - Create Session
+    - No request body
+    - No email
+    - No password
+    - Bad email
+    - Bad password
+    - Uses does not exist
+    - DB is down -> 500
+    - Success
+  - Get user
+    - No header
+    - No Auth token
+    - Blank token
+    - Bad token
+    - Old token
+    - User no longer exists (create & delete user from DB)
+    - DB is down -> 500
+    - Success

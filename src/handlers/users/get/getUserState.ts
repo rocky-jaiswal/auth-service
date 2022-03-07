@@ -1,6 +1,9 @@
+import { Either } from 'purify-ts'
 import { FastifyLoggerInstance } from 'fastify'
 import { IncomingHttpHeaders } from 'http'
+
 import BadRequestError from '../../../errors/badRequestError'
+import User from '../../../models/user'
 
 class GetUserState {
   public readonly authorization?: string
@@ -8,14 +11,15 @@ class GetUserState {
 
   public token?: string
   public userId?: string
-  public userEmail?: string
+  public user?: User
 
   public static create(requestHeaders: IncomingHttpHeaders, logger: FastifyLoggerInstance) {
-    if (!requestHeaders) {
-      throw new BadRequestError('Invalid get user request')
-    }
-
-    return new GetUserState(logger, requestHeaders.authorization)
+    return Either.encase(() => {
+      if (!requestHeaders) {
+        throw new BadRequestError('Invalid get user request')
+      }
+      return new GetUserState(logger, requestHeaders.authorization)
+    })
   }
 
   private constructor(logger: FastifyLoggerInstance, authorization?: string) {

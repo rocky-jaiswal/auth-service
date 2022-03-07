@@ -1,11 +1,13 @@
+import { Either } from 'purify-ts'
+
+import User from '../../../models/user'
 import BadRequestError from '../../../errors/badRequestError'
 
 class CreateSessionState {
   public readonly email: string
   public readonly password: string
 
-  public userId?: string
-  public encryptedPassword?: string
+  public user?: User
   public token?: string
 
   private constructor(email: string, password: string) {
@@ -14,12 +16,14 @@ class CreateSessionState {
   }
 
   public static create(requestBody: unknown) {
-    if (!requestBody) {
-      throw new BadRequestError('Invalid create user request')
-    }
+    return Either.encase(() => {
+      if (!requestBody) {
+        throw new BadRequestError('Invalid create user request')
+      }
 
-    const { email, password } = requestBody as Record<string, string>
-    return new CreateSessionState(email, password)
+      const { email, password } = requestBody as Record<string, string>
+      return new CreateSessionState(email, password)
+    })
   }
 }
 

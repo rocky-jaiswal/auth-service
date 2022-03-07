@@ -1,21 +1,17 @@
 import bcrypt from 'bcrypt'
+import { Left, Right } from 'purify-ts'
 
 import BadRequestError from '../errors/badRequestError'
+import CreateSessionState from '../handlers/sessions/create/createSessionState'
 
-interface HasUserCredentials {
-  email: string
-  password: string
-  encryptedPassword?: string
-}
-
-const comparePasswords = async (state: HasUserCredentials) => {
-  const result = await bcrypt.compare(state.password, state.encryptedPassword!)
+const comparePasswords = async (state: CreateSessionState) => {
+  const result = await bcrypt.compare(state.password, state.user!.encryptedPassword!)
 
   if (!result) {
-    throw new BadRequestError('Bad credentials!')
+    return Left(new BadRequestError('Bad credentials!'))
   }
 
-  return state
+  return Right(state)
 }
 
 export default comparePasswords

@@ -1,12 +1,15 @@
+import { Right } from 'purify-ts'
+
 import CreateSessionState from '../handlers/sessions/create/createSessionState'
+import CreateUserState from '../handlers/users/create/createUserState'
 import signJWT from '../services/signJWT'
 
-const createToken = async (state: CreateSessionState) => {
-  const token = signJWT(state.userId!)
+const createToken = async (state: CreateSessionState | CreateUserState) => {
+  const token = signJWT(state.user!.id)
 
   state.token = token
 
-  return state
+  return Right(state)
 }
 
 export default createToken

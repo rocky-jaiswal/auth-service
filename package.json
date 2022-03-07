@@ -24,6 +24,7 @@
     "knex": "^0.95.1",
     "openpgp": "^5.2.0",
     "pg": "^8.5.1",
+    "purify-ts": "^1.2.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

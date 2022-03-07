@@ -1,35 +1,38 @@
-import { pipeAsync } from '@rockyj/async-utils'
+import { EitherAsync, Left, Right } from 'purify-ts'
 import { FastifyRequest, FastifyReply } from 'fastify'
 
 import CreateUserState from './createUserState'
-import BadRequestError from '../../../errors/badRequestError'
 
+import { fetchUserByEmail } from '../../../services/fetchUserFromDB'
 import validateCreateUserRequest from '../../../actions/validateCreateUserRequest'
-import fetchUserFromDB from '../../../actions/fetchUserFromDB'
 import createUserInDB from '../../../actions/createUserInDB'
 import createToken from '../../../actions/createToken'
+import BadRequestError from '../../../errors/badRequestError'
 
-// TODO: In TS Error is lost in type :think:
 const createUser = async (request: FastifyRequest, response: FastifyReply) => {
   try {
-    const state = CreateUserState.create(request.body)
+    const state = await EitherAsync.liftEither(CreateUserState.create(request.body))
+      .chain(validateCreateUserRequest)
+      .chain(async (st) => {
+        const user = await fetchUserByEmail(st.email)
+        if (user.isNothing()) return Right(st)
+        return Left(new BadRequestError('user already exists'))
+      })
+      .chain(createUserInDB)
+      .chain(createToken)
+      .run()
 
-    const updatedState = await pipeAsync<CreateUserState>(
-      validateCreateUserRequest,
-      fetchUserFromDB({ shouldExist: false, findBy: 'email' }),
-      createUserInDB,
-      createToken
-    )(state)
-
-    response.send({ token: updatedState.token })
+    state.caseOf({
+      Left: (err) => response.code(400).send({ error: err.message }),
+      Right: (state) => {
+        response.send({ token: state.token })
+        return {}
+      },
+    })
   } catch (err) {
     request.log.error('Error in user creation')
     request.log.error({ err })
-    if (err instanceof BadRequestError) {
-      response.code(400).send({ error: err.message })
-    } else {
-      response.code(500).send({ error: 'Error in create user' })
-    }
+    response.code(500).send({ error: 'Error in create user' })
   }
 }
 

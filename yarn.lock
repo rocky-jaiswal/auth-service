@@ -115,7 +115,7 @@
   resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-4.0.5.tgz#738dd390a6ecc5442f35e7f03fa1431353f7e138"
   integrity sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==
 
-"@types/json-schema@^7.0.7":
+"@types/json-schema@7.0.9", "@types/json-schema@^7.0.7":
   version "7.0.9"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
   integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
@@ -2278,6 +2278,13 @@ pupa@^2.1.1:
   integrity sha512-l1jNAspIBSFqbT+y+5FosojNpVpF94nlI+wDUpqP9enwOTfHx9f0gh5nB96vl+6yTpsJsypeNrwfzPrKuHB41A==
   dependencies:
     escape-goat "^2.0.0"
+
+purify-ts@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/purify-ts/-/purify-ts-1.2.0.tgz#103f088798c55b78b0ba49d82714f912c5d35b4c"
+  integrity sha512-CTiMFDCaJ9vKXOnl13sRktbb6KMYB0NuQD0LPUYfEZO5YIKcN7uxIb7maSe0Ywzcm9O8LDcz7dQK1p6ZWDCvaQ==
+  dependencies:
+    "@types/json-schema" "7.0.9"
 
 queue-microtask@^1.1.2, queue-microtask@^1.2.2:
   version "1.2.3"

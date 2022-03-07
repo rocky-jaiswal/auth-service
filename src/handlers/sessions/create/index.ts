@@ -1,34 +1,33 @@
-import { pipeAsync } from '@rockyj/async-utils'
+import { EitherAsync } from 'purify-ts'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import BadRequestError from '../../../errors/badRequestError'
 import CreateSessionState from './createSessionState'
 
 import validateSessionCreateRequest from '../../../actions/validateSessionCreateRequest'
-import fetchUserFromDB from '../../../actions/fetchUserFromDB'
+import checkIfUserExists from '../../../actions/checkIfUserExists'
 import comparePasswords from '../../../actions/comparePasswords'
 import createToken from '../../../actions/createToken'
 
 const createSession = async (request: FastifyRequest, response: FastifyReply) => {
   try {
-    const state = CreateSessionState.create(request.body)
+    const state = await EitherAsync.liftEither(CreateSessionState.create(request.body))
+      .chain(validateSessionCreateRequest)
+      .chain(checkIfUserExists)
+      .chain(comparePasswords)
+      .chain(createToken)
+      .run()
 
-    const updatedState = await pipeAsync<CreateSessionState>(
-      validateSessionCreateRequest,
-      fetchUserFromDB({ shouldExist: true, findBy: 'email' }),
-      comparePasswords,
-      createToken
-    )(state)
-
-    response.send({ token: updatedState.token })
+    state.caseOf({
+      Left: (err) => response.code(400).send({ error: err.message }),
+      Right: (state) => {
+        response.send({ token: state.token })
+        return {}
+      },
+    })
   } catch (err) {
     request.log.error('Error in session creation')
     request.log.error({ err })
-    if (err instanceof BadRequestError) {
-      response.code(400).send({ error: err.message })
-    } else {
-      response.code(500).send({ error: 'Error in create session' })
-    }
+    response.code(500).send({ error: 'Error in create session' })
   }
 }
 
