@@ -2,8 +2,8 @@ import { Either } from 'purify-ts'
 import BadRequestError from '../errors/badRequestError'
 import CreateSessionState from '../handlers/sessions/create/createSessionState'
 
-const validateSessionCreateRequest = async (state: CreateSessionState) => {
-  return Either.encase(() => {
+const validateSessionCreateRequest = async (state: CreateSessionState) =>
+  Either.encase(() => {
     if (
       !state ||
       !state.email ||
@@ -16,6 +16,5 @@ const validateSessionCreateRequest = async (state: CreateSessionState) => {
 
     return state
   })
-}
 
 export default validateSessionCreateRequest

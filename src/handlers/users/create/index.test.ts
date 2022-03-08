@@ -180,10 +180,11 @@ describe('user creation', () => {
   test('success', async () => {
     const send = jest.fn()
     const code = jest.fn(() => ({ send }))
+    const email = 'rj@example.com'
 
     const request = {
       body: {
-        email: 'rj@example.com',
+        email,
         password: '123456',
         confirmedPassword: '123456',
       },
@@ -198,5 +199,9 @@ describe('user creation', () => {
 
     expect(code).toHaveBeenCalledWith(201)
     expect(send).toHaveBeenCalled()
+
+    const users = await database!('users').select('email')
+    expect(users.length).toBe(1)
+    expect(users[0].email).toBe(email)
   })
 })

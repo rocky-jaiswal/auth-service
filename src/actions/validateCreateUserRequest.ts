@@ -3,8 +3,8 @@ import BadRequestError from '../errors/badRequestError'
 import CreateUserState from '../handlers/users/create/createUserState'
 
 // TODO: Test this
-const validateCreateUserRequest = async (state: CreateUserState) => {
-  return Either.encase(() => {
+const validateCreateUserRequest = async (state: CreateUserState) =>
+  Either.encase(() => {
     if (
       !state.email ||
       !state.password ||
@@ -18,6 +18,5 @@ const validateCreateUserRequest = async (state: CreateUserState) => {
 
     return state
   })
-}
 
 export default validateCreateUserRequest
