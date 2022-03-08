@@ -3,10 +3,10 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { fetchUserById } from '../../../services/fetchUserFromDB'
 import { sendErrorResponse } from '../../../services/sendResponse'
-import validateToken from '../../../actions/validateToken'
-import validateGetUserRequest from '../../../actions/validateGetUserRequest'
 import User from '../../../models/user'
 import GetUserState from './getUserState'
+import validateToken from '../../../actions/validateToken'
+import validateGetUserRequest from '../../../actions/validateGetUserRequest'
 
 const getUser = async (request: FastifyRequest, response: FastifyReply) => {
   try {
@@ -31,7 +31,7 @@ const getUser = async (request: FastifyRequest, response: FastifyReply) => {
     })
   } catch (err) {
     request.log.error('error in user fetch')
-    request.log.error({ err })
+    request.log.error(err)
     response.code(500).send({ error: 'error in create user' })
   }
 }

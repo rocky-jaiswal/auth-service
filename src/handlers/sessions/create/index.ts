@@ -29,7 +29,7 @@ const createSession = async (request: FastifyRequest, response: FastifyReply) =>
     })
   } catch (err) {
     request.log.error('error in session creation')
-    request.log.error({ err })
+    request.log.error(err)
     response.code(500).send({ error: 'error in create session' })
   }
 }
