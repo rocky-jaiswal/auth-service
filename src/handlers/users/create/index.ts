@@ -24,7 +24,7 @@ const createUser = async (request: FastifyRequest, response: FastifyReply) => {
         response.code(res.code).send({ error: res.message })
       },
       Right: (state) => {
-        response.send({ token: state.token })
+        response.code(201).send({ token: state.token })
       },
     })
   } catch (err) {

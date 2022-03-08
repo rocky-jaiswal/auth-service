@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import Db from '../repositories/db'
-import { getTimeStamp } from '../services/utils'
+import { getTimeStamp } from '../../services/utils'
+import Db from '../../repositories/db'
 
 const ping = async (request: FastifyRequest, response: FastifyReply) => {
   try {
@@ -9,9 +9,9 @@ const ping = async (request: FastifyRequest, response: FastifyReply) => {
 
     response.send({ date })
   } catch (e) {
-    request.log.error('Error in healthcheck')
+    request.log.error('error in healthcheck')
     request.log.error(e)
-    response.code(500).send({ error: 'error in healthcheck' + e.message })
+    response.code(500).send({ error: 'error in healthcheck' })
   }
 }
 

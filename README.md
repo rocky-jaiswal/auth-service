@@ -9,3 +9,4 @@
 5. Copy the secret/password to .env
 6. Run DB with `docker-compose up --build`
 7. Run `./run_dev.sh`
+8. For testing make sure DB is up (via docker-compose) and run `yarn test`
