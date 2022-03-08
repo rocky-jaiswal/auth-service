@@ -1,27 +1,26 @@
-import { Either, Left, Maybe } from 'purify-ts'
+import { Either, Left, Right } from 'purify-ts'
 
 import { fetchUserByEmail } from '../services/fetchUserFromDB'
 import BadRequestError from '../errors/badRequestError'
 import ServerError from '../errors/serverError'
 import CreateSessionState from '../handlers/sessions/create/createSessionState'
-import User from '../models/user'
 
-const checkIfUserExists = async (state: CreateSessionState) => {
-  let user: Maybe<User>
+const checkIfUserExists = async (
+  state: CreateSessionState
+): Promise<Either<Error, CreateSessionState>> => {
   try {
-    user = await fetchUserByEmail(state.email)
+    const user = await fetchUserByEmail(state.email)
+
+    if (user.isNothing()) {
+      return Left(new BadRequestError('user does not exist'))
+    }
+
+    state.user = user.extract()
+    return Right(state)
   } catch (err) {
     // TODO: Log this error
     return Left(new ServerError('server error'))
   }
-
-  return Either.encase(() => {
-    if (!user || user.isNothing()) {
-      throw new BadRequestError('user does not exist')
-    }
-    state.user = user.extract()
-    return state
-  })
 }
 
 export default checkIfUserExists
