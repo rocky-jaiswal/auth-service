@@ -7,7 +7,7 @@ import { Buffer } from 'buffer'
   const environment = process.argv[2]
   const secret = process.argv[3]
 
-  const fileContents = fs.readFileSync(`secrets/${environment}.yaml.enc`).toString()
+  const fileContents = fs.readFileSync(`secrets/${environment}.env.enc`).toString()
   const binaryMessage = Buffer.from(fileContents, 'base64')
 
   const encryptedMessage = await openpgp.readMessage({
@@ -20,5 +20,5 @@ import { Buffer } from 'buffer'
     format: 'binary',
   })
 
-  fs.writeFileSync(`secrets/${environment}.yaml`, Buffer.from(decrypted).toString())
+  fs.writeFileSync(`secrets/${environment}.env`, Buffer.from(decrypted).toString())
 })()

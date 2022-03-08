@@ -1,11 +1,11 @@
 'use strict'
 
-const config = require('config')
+require('dotenv').config()
 
 const dbConfiguration = {
   client: 'postgresql',
   useNullAsDefault: true,
-  connection: config.get('secrets.db.connString'),
+  connection: process.env.DB_CONN,
   pool: {
     min: 2,
     max: 10,

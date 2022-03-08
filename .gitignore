@@ -2,4 +2,5 @@ dist/
 node_modules/
 postgres/data/
 secrets/*.yaml
+secrets/*.env
 .env
