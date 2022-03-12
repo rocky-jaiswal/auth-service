@@ -5,8 +5,8 @@ import GetUserState from '../handlers/users/get/getUserState'
 
 const validateGetUserRequest = async (state: GetUserState) =>
   Either.encase(() => {
-    if (!state.authorization) {
-      throw new BadRequestError('invalid request - no authorization header')
+    if (!state.authorization || state.authorization === '' || state.authorization.length < 7) {
+      throw new BadRequestError('invalid request - bad authorization header')
     }
     state.token = state.authorization.substring(6)
     return state

@@ -26,7 +26,7 @@ const getUser = async (request: FastifyRequest, response: FastifyReply) => {
         response.code(res.code).send({ error: res.message })
       },
       Right: (user) => {
-        response.send({ userId: user.id, email: user.email })
+        response.code(200).send({ userId: user.id, email: user.email })
       },
     })
   } catch (err) {

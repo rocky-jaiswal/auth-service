@@ -18,7 +18,7 @@ class CreateSessionState {
   public static create(requestBody: unknown) {
     return Either.encase(() => {
       if (!requestBody) {
-        throw new BadRequestError('Invalid create user request')
+        throw new BadRequestError('invalid create session request')
       }
 
       const { email, password } = requestBody as Record<string, string>

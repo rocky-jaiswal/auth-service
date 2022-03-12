@@ -11,7 +11,7 @@ const validateSessionCreateRequest = async (state: CreateSessionState) =>
       !state.email.match(/@/) ||
       state.password.length < 6
     ) {
-      throw new BadRequestError('bad user credentials provided!')
+      throw new BadRequestError('bad user credentials provided')
     }
 
     return state

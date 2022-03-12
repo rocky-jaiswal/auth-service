@@ -7,9 +7,7 @@ import UserRepository from '../repositories/userRepository'
 
 export const fetchUserById = (raiseErrorIfNotFound: boolean) => async (id: string) => {
   const user = await new UserRepository(db).findById(id)
-  return raiseErrorIfNotFound
-    ? user.toEither(new BadRequestError('Invalid user request - user not found'))
-    : user
+  return raiseErrorIfNotFound ? user.toEither(new BadRequestError('user not found')) : user
 }
 
 export const fetchUserByEmail = async (email: string) => {

@@ -8,7 +8,7 @@
     "migrate-latest": "npx knex migrate:latest",
     "clean": "rm -rf dist/ && mkdir dist",
     "build": "yarn clean && yarn tsc",
-    "test": "cp secrets/test.env.sample ./.env && NODE_ENV=test yarn migrate-latest && NODE_ENV=test yarn jest && rm .env",
+    "test": "cp secrets/test.env.sample ./.env && NODE_ENV=test yarn migrate-latest && NODE_ENV=test yarn jest --runInBand && rm .env",
     "lint": "yarn eslint 'src/**/*'",
     "watch-node": "NODE_ENV=development nodemon dist/index.js",
     "watch-ts": "tsc -w",

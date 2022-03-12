@@ -16,7 +16,7 @@ class GetUserState {
   public static create(requestHeaders: IncomingHttpHeaders, logger: FastifyLoggerInstance) {
     return Either.encase(() => {
       if (!requestHeaders) {
-        throw new BadRequestError('Invalid get user request')
+        throw new BadRequestError('invalid get user request')
       }
       return new GetUserState(logger, requestHeaders.authorization)
     })
