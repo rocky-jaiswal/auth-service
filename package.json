@@ -4,15 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "create-migration": "NODE_ENV=development npx knex migrate:make",
-    "migrate-latest": "npx knex migrate:latest",
-    "clean": "rm -rf dist/ && mkdir dist",
-    "build": "yarn clean && yarn tsc",
-    "test": "cp secrets/test.env.sample ./.env && NODE_ENV=test yarn migrate-latest && NODE_ENV=test yarn jest --runInBand && rm .env",
-    "lint": "yarn eslint 'src/**/*'",
-    "watch-node": "NODE_ENV=development nodemon dist/index.js",
-    "watch-ts": "tsc -w",
-    "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\""
+    "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"yarn tsc -w\" \"NODE_ENV=development nodemon dist/index.js\""
   },
   "dependencies": {
     "@rockyj/async-utils": "^1.0.5",
@@ -39,7 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
     "concurrently": "^6.0.0",
-    "eslint": "^8.2.0",
+    "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
