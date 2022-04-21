@@ -28,7 +28,9 @@
 .watch-ts:
 	NODE_ENV=development npx tsc -w
 
-.dev: .clean .build .migrate-latest
+.dev: .clean .build
+	docker-compose up --detach
+	npx knex migrate:latest
 	cp -R src/keys dist/keys
 	cp -R src/public dist/public
 	rm -rf .env

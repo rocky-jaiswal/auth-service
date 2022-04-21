@@ -12,15 +12,25 @@ class UserRepository {
     this.db = db
   }
 
-  public async createUser(email: string, encryptedPassword: string) {
+  public async createDBUser(email: string, encryptedPassword: string) {
     const user = (await this.db(UserRepository.TABLE_NAME)
       .returning(['id', 'email', 'encrypted_password'])
       .insert({
         email: email,
         encrypted_password: encryptedPassword,
+        auth_type: 'db',
       })) as any[]
 
     return User.create(user[0].id, user[0].email, user[0].encrypted_password)
+  }
+
+  public async createGoogleUser(email: string) {
+    const user = (await this.db(UserRepository.TABLE_NAME).returning(['id', 'email']).insert({
+      email: email,
+      auth_type: 'google',
+    })) as any[]
+
+    return User.create(user[0].id, user[0].email, '')
   }
 
   public async findByEmail(email: string) {

@@ -1,6 +1,8 @@
+import 'dotenv/config'
+
 import Fastify, { FastifyInstance } from 'fastify'
 import path from 'path'
-import 'dotenv/config'
+import fastifyOauth2 from 'fastify-oauth2'
 
 import routing from './routing'
 
@@ -15,7 +17,22 @@ server.register(require('fastify-static'), {
   root: path.join(__dirname, './public'),
 })
 
-const port = process.env.SERVER_PORT || 3000
+// Oauth
+server.register(fastifyOauth2, {
+  name: 'googleOAuth2',
+  scope: ['profile', 'https://www.googleapis.com/auth/user.emails.read'],
+  credentials: {
+    client: {
+      id: process.env.GOOGLE_CLIENT_ID!,
+      secret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+    auth: fastifyOauth2.GOOGLE_CONFIGURATION,
+  },
+  startRedirectPath: '/login/google',
+  callbackUri: process.env.GOOGLE_CALLBACK_URI!,
+})
+
+const port = process.env.SERVER_PORT || 3001
 
 // Startup
 const start = async () => {
