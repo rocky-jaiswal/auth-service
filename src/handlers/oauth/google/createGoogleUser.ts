@@ -2,9 +2,9 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { EitherAsync } from 'purify-ts'
 
 import { sendErrorResponse } from '../../../services/sendResponse'
-import signJWT from '../../../services/signJWT'
 import fetchEmailFromGoogle from '../../../actions/fetchEmailFromGoogle'
 import fetchOrCreateGoogleUser from '../../../actions/fetchOrCreateGoogleUser'
+import createToken from '../../../actions/createToken'
 import CreateGoogleUserState from './createGoogleUserState'
 
 const createGoogleUser = async (request: FastifyRequest, response: FastifyReply) => {
@@ -12,6 +12,7 @@ const createGoogleUser = async (request: FastifyRequest, response: FastifyReply)
     const state = await EitherAsync.liftEither(CreateGoogleUserState.create(request.body))
       .chain(fetchEmailFromGoogle)
       .chain(fetchOrCreateGoogleUser)
+      .chain(createToken)
       .run()
 
     state.caseOf({
@@ -20,7 +21,7 @@ const createGoogleUser = async (request: FastifyRequest, response: FastifyReply)
         response.code(res.code).send({ error: res.message })
       },
       Right: (state) => {
-        response.code(200).send({ token: signJWT(state.user!.id) })
+        response.code(200).send({ token: state.token })
       },
     })
   } catch (e) {
