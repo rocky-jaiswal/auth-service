@@ -1,45 +1,28 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { OAuth2Client } from 'google-auth-library'
+import { EitherAsync } from 'purify-ts'
 
-import db from '../../../repositories/db'
-import UserRepository from '../../../repositories/userRepository'
+import { sendErrorResponse } from '../../../services/sendResponse'
 import signJWT from '../../../services/signJWT'
-
-const oAuth2Client = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_CALLBACK_URI
-)
-
-const GOOGLE_PEOPLE_API = 'https://people.googleapis.com/v1/people/me?personFields=emailAddresses'
+import fetchEmailFromGoogle from '../../../actions/fetchEmailFromGoogle'
+import fetchOrCreateGoogleUser from '../../../actions/fetchOrCreateGoogleUser'
+import CreateGoogleUserState from './createGoogleUserState'
 
 const createGoogleUser = async (request: FastifyRequest, response: FastifyReply) => {
   try {
-    const body = request.body as Record<string, string>
-    const tokenResponse = await oAuth2Client.getToken(body.code)
-    oAuth2Client.setCredentials(tokenResponse.tokens)
+    const state = await EitherAsync.liftEither(CreateGoogleUserState.create(request.body))
+      .chain(fetchEmailFromGoogle)
+      .chain(fetchOrCreateGoogleUser)
+      .run()
 
-    const res = await oAuth2Client.request({
-      url: GOOGLE_PEOPLE_API,
+    state.caseOf({
+      Left: (err) => {
+        const res = sendErrorResponse(err)
+        response.code(res.code).send({ error: res.message })
+      },
+      Right: (state) => {
+        response.code(200).send({ token: signJWT(state.user!.id) })
+      },
     })
-
-    // TODO: Improve code here
-    const responseData = res.data as any
-    const email = responseData.emailAddresses[0].value
-
-    const userRepo = new UserRepository(db)
-
-    const maybeUser = await userRepo.findByEmail(email)
-
-    const userPromise = maybeUser.caseOf({
-      Just: (user) => Promise.resolve(user),
-      Nothing: () => userRepo.createGoogleUser(email),
-    })
-
-    const user = await userPromise
-    const token = signJWT(user.id)
-
-    response.send({ token })
   } catch (e) {
     request.log.error('error in createGoogleUser')
     request.log.error(e)
