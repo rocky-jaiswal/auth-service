@@ -1,4 +1,5 @@
-.dev: NODE_ENV = development
+.dev: NODE_ENV = development 
+.dev: DOTENV_CONFIG_PATH = ./secrets/development.env
 
 .create-migration:
 	NODE_ENV=development npx knex migrate:make
@@ -29,11 +30,9 @@
 	NODE_ENV=development npx tsc -w
 
 .dev: .clean .build
+	node bin/unlockSecret.mjs $(NODE_ENV) $(secret)
 	docker-compose up --detach
-	npx knex migrate:latest
+	DOTENV_CONFIG_PATH=$(DOTENV_CONFIG_PATH) npx knex migrate:latest
 	cp -R src/keys dist/keys
 	cp -R src/public dist/public
-	rm -rf .env
-	node bin/unlockSecret.mjs $(NODE_ENV) $(secret)
-	cp secrets/development.env ./.env
-	npx concurrently -k -p "[{name}]" -n "TypeScript, Node" -c "yellow.bold, green.bold" "npx tsc -w" "npx nodemon dist/index.js"
+	npx concurrently -k -p "[{name}]" -n "TypeScript, Node" -c "yellow.bold, green.bold" "npx tsc -w" "DOTENV_CONFIG_PATH=$(DOTENV_CONFIG_PATH) npx nodemon dist/index.js"
