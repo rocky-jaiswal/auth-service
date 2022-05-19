@@ -15,7 +15,7 @@ const routing = (server: FastifyInstance, _opts: FastifyPluginOptions, done: Fun
   server.get('/user', getUser)
 
   // Oauth stuff
-  server.post('/login/google', createGoogleUser) // route called by UI
+  server.post('/login/google', createGoogleUser)
 
   done()
 }

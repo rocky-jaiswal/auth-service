@@ -13,6 +13,8 @@
 
 .build: .clean
 	yarn tsc
+	cp -R src/keys dist/keys
+	cp -R src/public dist/public
 
 .lint:
 	yarn eslint 'src/**/*'
@@ -30,9 +32,7 @@
 	NODE_ENV=development npx tsc -w
 
 .dev: .clean .build
-	node bin/unlockSecret.mjs $(NODE_ENV) $(secret)
 	docker-compose up --detach
+	node bin/unlockSecret.mjs $(NODE_ENV) $(secret)
 	DOTENV_CONFIG_PATH=$(DOTENV_CONFIG_PATH) npx knex migrate:latest
-	cp -R src/keys dist/keys
-	cp -R src/public dist/public
 	npx concurrently -k -p "[{name}]" -n "TypeScript, Node" -c "yellow.bold, green.bold" "npx tsc -w" "DOTENV_CONFIG_PATH=$(DOTENV_CONFIG_PATH) npx nodemon dist/index.js"
