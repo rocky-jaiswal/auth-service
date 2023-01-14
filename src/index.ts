@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 import Fastify, { FastifyInstance } from 'fastify'
 import path from 'path'
-import fastifyOauth2 from 'fastify-oauth2'
+import fastifyOauth2 from '@fastify/oauth2'
 
 import routing from './routing'
 
@@ -13,7 +13,7 @@ const server: FastifyInstance = Fastify({ logger: true })
 server.register(routing, { prefix: '/v1' })
 
 // Static route
-server.register(require('fastify-static'), {
+server.register(require('@fastify/static'), {
   root: path.join(__dirname, './public'),
 })
 
@@ -32,12 +32,12 @@ server.register(fastifyOauth2, {
   callbackUri: process.env.GOOGLE_CALLBACK_URI!,
 })
 
-const port = process.env.SERVER_PORT || 3001
+const port = parseInt(process.env.SERVER_PORT || '3001')
 
 // Startup
 const start = async () => {
   try {
-    await server.listen(port, '0.0.0.0')
+    await server.listen({ port })
   } catch (err) {
     server.log.error({ err })
     process.exit(1)

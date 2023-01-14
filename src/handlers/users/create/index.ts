@@ -1,5 +1,6 @@
 import { EitherAsync } from 'purify-ts'
 import { FastifyRequest, FastifyReply } from 'fastify'
+import camelcaseKeys from 'camelcase-keys'
 
 import CreateUserState from './createUserState'
 
@@ -11,7 +12,8 @@ import createToken from '../../../actions/createToken'
 
 const createUser = async (request: FastifyRequest, response: FastifyReply) => {
   try {
-    const state = await EitherAsync.liftEither(CreateUserState.create(request.body))
+    const reqBody = camelcaseKeys(request.body ?? {})
+    const state = await EitherAsync.liftEither(CreateUserState.create(reqBody))
       .chain(validateCreateUserRequest)
       .chain(ensureUserDoesNotExist)
       .chain(createUserInDB)

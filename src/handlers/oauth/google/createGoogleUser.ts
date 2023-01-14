@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { EitherAsync } from 'purify-ts'
+import camelcaseKeys from 'camelcase-keys'
 
 import { sendErrorResponse } from '../../../services/sendResponse'
 import fetchEmailFromGoogle from '../../../actions/fetchEmailFromGoogle'
@@ -9,7 +10,8 @@ import CreateGoogleUserState from './createGoogleUserState'
 
 const createGoogleUser = async (request: FastifyRequest, response: FastifyReply) => {
   try {
-    const state = await EitherAsync.liftEither(CreateGoogleUserState.create(request.body))
+    const reqBody = camelcaseKeys(request.body ?? {})
+    const state = await EitherAsync.liftEither(CreateGoogleUserState.create(reqBody))
       .chain(fetchEmailFromGoogle)
       .chain(fetchOrCreateGoogleUser)
       .chain(createToken)
