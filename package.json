@@ -4,7 +4,8 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"yarn tsc -w\" \"NODE_ENV=development nodemon dist/index.js\""
+    "run:dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,green.bold\" \"yarn tsc -w\" \"NODE_ENV=development nodemon dist/index.js\"",
+    "dev": "/bin/sh ./bin/run-dev.sh"
   },
   "dependencies": {
     "@fastify/oauth2": "^7.0.0",

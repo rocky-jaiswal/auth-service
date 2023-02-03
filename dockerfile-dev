@@ -1,0 +1,13 @@
+FROM node:18-alpine
+
+ARG SECRET
+
+RUN mkdir -p /opt/app
+ADD . /opt/app
+WORKDIR  /opt/app
+
+ENV NODE_ENV=development
+
+RUN node /opt/app/bin/unlockSecret.mjs development $SECRET
+
+EXPOSE 9090

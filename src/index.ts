@@ -37,7 +37,7 @@ const port = parseInt(process.env.SERVER_PORT || '3001')
 // Startup
 const start = async () => {
   try {
-    await server.listen({ port })
+    await server.listen({ port, host: '::' })
   } catch (err) {
     server.log.error({ err })
     process.exit(1)
