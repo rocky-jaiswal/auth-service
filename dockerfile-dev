@@ -8,6 +8,4 @@ WORKDIR  /opt/app
 
 ENV NODE_ENV=development
 
-RUN node /opt/app/bin/unlockSecret.mjs development $SECRET
-
 EXPOSE 9090

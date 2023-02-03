@@ -25,8 +25,8 @@ services:
       - ./:/opt/app
     environment:
       NODE_ENV: development
-      SECRET: ${AUTH_SERVICE_SECRET}
       DOTENV_CONFIG_PATH: /opt/app/secrets/development.env
+      SECRET: ${AUTH_SERVICE_SECRET}
     command: "yarn dev"
     depends_on:
       - db
