@@ -7,5 +7,6 @@ ADD . /opt/app
 WORKDIR  /opt/app
 
 ENV NODE_ENV=development
+ENV SECRET=$SECRET
 
 EXPOSE 9090
