@@ -11,25 +11,25 @@ services:
       POSTGRES_PASSWORD: "postgres"
     volumes:
       - ./postgres/data:/var/lib/postgresql/data:z
-  # auth-service:
-  #   networks:
-  #     - appnet
-  #   build:
-  #     context: ./
-  #     dockerfile: dockerfile-dev
-  #     args:
-  #       SECRET: ${AUTH_SERVICE_SECRET}
-  #   ports:
-  #     - "9090:9090"
-  #   volumes:
-  #     - ./:/opt/app
-  #   environment:
-  #     NODE_ENV: development
-  #     DOTENV_CONFIG_PATH: /opt/app/secrets/development.env
-  #     SECRET: ${AUTH_SERVICE_SECRET}
-  #   command: "yarn docker:dev"
-  #   depends_on:
-  #     - db
+  auth-service:
+    networks:
+      - appnet
+    build:
+      context: ./
+      dockerfile: dockerfile-dev
+      args:
+        SECRET: ${AUTH_SERVICE_SECRET}
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./:/opt/app
+    environment:
+      NODE_ENV: development
+      DOTENV_CONFIG_PATH: /opt/app/secrets/development.env
+      SECRET: ${AUTH_SERVICE_SECRET}
+    command: "yarn dev"
+    depends_on:
+      - db
 networks:
   appnet:
     driver: "bridge"
