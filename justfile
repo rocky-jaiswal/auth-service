@@ -25,12 +25,6 @@ test:
 	NODE_ENV=test DOTENV_CONFIG_PATH="./secrets/test.env" npx knex migrate:latest
 	NODE_ENV=test DOTENV_CONFIG_PATH="./secrets/test.env" yarn jest --runInBand
 
-watch-node:
-	NODE_ENV=development nodemon dist/index.js
-
-watch-ts:
-	NODE_ENV=development npx tsc -w
-
 dev: clean build
 	node bin/unlockSecret.mjs {{NODE_ENV}} $AUTH_SERVICE_SECRET
 	DOTENV_CONFIG_PATH={{DOTENV_CONFIG_PATH}} npx knex migrate:latest
