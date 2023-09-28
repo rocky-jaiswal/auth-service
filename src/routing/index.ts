@@ -9,6 +9,7 @@ import createGoogleUser from '../handlers/oauth/google/createGoogleUser'
 
 const routing = (server: FastifyInstance, _opts: FastifyPluginOptions, done: Function) => {
   server.get('/ping', ping)
+  server.get('/health', ping)
 
   server.post('/users', createUser)
   server.post('/sessions', createSession)

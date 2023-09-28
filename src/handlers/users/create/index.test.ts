@@ -155,12 +155,12 @@ describe('user creation', () => {
     const code = jest.fn(() => ({ send }))
 
     await database?.raw(
-      "INSERT INTO users(email, encrypted_password) values('rj@example.com', 'foobar')"
+      "INSERT INTO users(email, encrypted_password, auth_type) values('rj1@example.com', 'foobar', 'db')"
     )
 
     const request = {
       body: {
-        email: 'rj@example.com',
+        email: 'rj1@example.com',
         password: '123456',
         confirmedPassword: '123456',
       },
@@ -180,7 +180,7 @@ describe('user creation', () => {
   test('success', async () => {
     const send = jest.fn()
     const code = jest.fn(() => ({ send }))
-    const email = 'rj@example.com'
+    const email = 'rj2@example.com'
 
     const request = {
       body: {

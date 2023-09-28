@@ -36,7 +36,7 @@ describe('session creation', () => {
     await createSession(request, reply)
 
     expect(code).toHaveBeenCalledWith(400)
-    expect(send).toHaveBeenCalledWith({ error: 'invalid create session request' })
+    expect(send).toHaveBeenCalledWith({ error: 'bad user credentials provided' })
   })
 
   test('request with no email', async () => {

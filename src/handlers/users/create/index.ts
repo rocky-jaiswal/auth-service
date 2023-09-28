@@ -22,6 +22,7 @@ const createUser = async (request: FastifyRequest, response: FastifyReply) => {
 
     state.caseOf({
       Left: (err) => {
+        request.log.warn(err)
         const res = sendErrorResponse(err)
         response.code(res.code).send({ error: res.message })
       },
