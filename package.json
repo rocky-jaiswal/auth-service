@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "helpme": "just -l"
+  },
   "dependencies": {
     "@fastify/oauth2": "^7.0.0",
     "@fastify/static": "^6.0.0",

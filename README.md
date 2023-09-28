@@ -7,7 +7,7 @@
 3. Generate a strong secret/password somehow (e.g. `crypto.randomUUID().replaceAll('-', '').substring(0, 16)`)
 4. Run `node bin/lockSecret.mjs <environment> <secret>` to encrypt secrets, use secret/password from step 3 here (encryption uses Node GPG)
 5. Run DB with `docker-compose up --build`
-6. Run `just dev` to start service in dev mode (runs DB in docker)
+6. Run `just dev` to start service in dev mode (DB is already running on docker)
 7. For testing make sure DB is up (via docker-compose) and run `just test`
 
 ## Common HTTP requests (using HTTPIE)
