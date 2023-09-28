@@ -9,3 +9,9 @@
 5. Run DB with `docker-compose up --build`
 6. Run `just dev` to start service in dev mode (runs DB in docker)
 7. For testing make sure DB is up (via docker-compose) and run `just test`
+
+## Common HTTP requests (using HTTPIE)
+
+- `http http://localhost:9090/v1/users email="ryan@example.com" password="123456" confirmedPassword="123456"`
+- `http http://localhost:9090/v1/sessions email="ryan@example.com" password="123456"`
+- `http http://localhost:9090/v1/user authorization:"token <jwt>"`
