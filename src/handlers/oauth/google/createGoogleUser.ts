@@ -19,6 +19,7 @@ const createGoogleUser = async (request: FastifyRequest, response: FastifyReply)
 
     state.caseOf({
       Left: (err) => {
+        request.log.error(err)
         const res = sendErrorResponse(err)
         response.code(res.code).send({ error: res.message })
       },

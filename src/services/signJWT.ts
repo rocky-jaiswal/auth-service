@@ -7,7 +7,7 @@ const privateKey = fs.readFileSync(privateKeyPath)
 
 const signJWT = (userId: string) =>
   jwt.sign(
-    { id: userId },
+    { id: userId, sub: userId },
     { key: privateKey, passphrase: process.env.KEY_SECRET || '' },
     {
       algorithm: 'RS256',
