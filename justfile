@@ -19,7 +19,7 @@ build: clean
 	cp -R src/public dist/public
 
 lint:
-	yarn eslint 'src/**/*'
+	yarn eslint 'src/**/*.ts'
 
 test:
 	NODE_ENV=test DOTENV_CONFIG_PATH="./secrets/test.env" npx knex migrate:latest

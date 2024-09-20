@@ -29,6 +29,8 @@ const fetchEmailFromGoogle = async (
     return Right(state)
   } catch (err) {
     // TODO: Log this error
+    // console.log(err)
+
     return Left(new ServerError('server error'))
   }
 }
