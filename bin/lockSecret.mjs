@@ -1,9 +1,10 @@
 'use strict'
 
 import { Buffer } from 'buffer'
-import openpgp from 'openpgp'
+import * as openpgp from 'openpgp'
 import fs from 'fs'
-;(async () => {
+
+const lockSecrets = async () => {
   const environment = process.argv[2]
   const secret = process.argv[3]
 
@@ -17,4 +18,6 @@ import fs from 'fs'
   })
 
   fs.writeFileSync(`secrets/${environment}.env.enc`, Buffer.from(encrypted).toString('base64'))
-})()
+}
+
+lockSecrets().then(console.log('success!')).catch(console.error)

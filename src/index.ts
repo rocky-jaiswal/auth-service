@@ -32,7 +32,7 @@ server.register(fastifyOauth2, {
   callbackUri: process.env.GOOGLE_CALLBACK_URI!,
 })
 
-const port = parseInt(process.env.SERVER_PORT || '3001')
+const port = parseInt(process.env.AUTH_SERVER_PORT || '3001')
 
 // Startup
 const start = async () => {

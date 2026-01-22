@@ -15,7 +15,8 @@ const createUserInDB = async (state: CreateUserState): Promise<Either<Error, Cre
     state.user = user
 
     return Right(state)
-  } catch {
+  } catch (err) {
+    console.log(err)
     return Left(new ServerError('server error'))
   }
 }

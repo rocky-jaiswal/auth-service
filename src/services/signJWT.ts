@@ -5,8 +5,8 @@ import jwt from 'jsonwebtoken'
 const privateKeyPath = path.resolve(__dirname, `./../keys/private${process.env.KEY_SUFFIX}.pem`)
 const privateKey = fs.readFileSync(privateKeyPath)
 
-const signJWT = (userId: string) =>
-  jwt.sign(
+const signJWT = (userId: string) => {
+  return jwt.sign(
     { id: userId, sub: userId },
     { key: privateKey, passphrase: process.env.KEY_SECRET || '' },
     {
@@ -16,5 +16,6 @@ const signJWT = (userId: string) =>
       expiresIn: '1h',
     }
   )
+}
 
 export default signJWT

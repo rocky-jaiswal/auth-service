@@ -1,3 +1,3 @@
-FROM postgres:14-alpine
+FROM postgres:17-alpine
 
-COPY ./init-user-db.sql /docker-entrypoint-initdb.d/init-user-db.sql
+# COPY ./init-user-db.sql /docker-entrypoint-initdb.d/init-user-db.sql

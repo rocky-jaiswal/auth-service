@@ -1,9 +1,10 @@
 'use strict'
 
-import openpgp from 'openpgp'
+import * as openpgp from 'openpgp'
 import fs from 'fs'
 import { Buffer } from 'buffer'
-;(async () => {
+
+const unlockSecrets = async () => {
   const environment = process.argv[2]
   const secret = process.argv[3]
 
@@ -21,4 +22,6 @@ import { Buffer } from 'buffer'
   })
 
   fs.writeFileSync(`secrets/${environment}.env`, Buffer.from(decrypted).toString())
-})()
+}
+
+unlockSecrets().then(console.log('success!')).catch(console.error)
