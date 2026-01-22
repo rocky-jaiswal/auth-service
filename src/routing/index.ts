@@ -6,6 +6,7 @@ import createUser from '../handlers/users/create'
 import getUser from '../handlers/users/get'
 
 import createGoogleUser from '../handlers/oauth/google/createGoogleUser'
+import createMicrosoftUser from '../handlers/oauth/microsoft/createMicrosoftUser'
 
 const routing = (server: FastifyInstance, _opts: FastifyPluginOptions, done: Function) => {
   server.get('/ping', ping)
@@ -17,6 +18,7 @@ const routing = (server: FastifyInstance, _opts: FastifyPluginOptions, done: Fun
 
   // Oauth stuff
   server.post('/login/google', createGoogleUser)
+  server.post('/login/microsoft', createMicrosoftUser)
 
   done()
 }

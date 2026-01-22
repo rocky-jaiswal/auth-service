@@ -40,6 +40,15 @@ class UserRepository {
     return User.create(user[0].id, user[0].email, '')
   }
 
+  public async createMicrosoftUser(email: string) {
+    const user = (await this.db(UserRepository.TABLE_NAME).returning(['id', 'email']).insert({
+      email: email,
+      auth_type: 'microsoft',
+    })) as UserFromDB[]
+
+    return User.create(user[0].id, user[0].email, '')
+  }
+
   public async findByEmail(email: string) {
     const user = (await this.db(UserRepository.TABLE_NAME)
       .where({ email })

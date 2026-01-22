@@ -7,6 +7,7 @@
     "helpme": "just -l"
   },
   "dependencies": {
+    "@azure/msal-node": "^5.0.2",
     "@fastify/oauth2": "^8.1.0",
     "@fastify/static": "^9.0.0",
     "@rockyj/async-utils": "^1.0.5",
