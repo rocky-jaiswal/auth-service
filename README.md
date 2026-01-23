@@ -32,10 +32,27 @@ Required for Microsoft OAuth:
 - `MICROSOFT_TENANT_ID` - Azure AD tenant ID (or 'common' for multi-tenant)
 - `MICROSOFT_CALLBACK_URI` - OAuth callback/redirect URI
 
+## OAuth Flow
+
+### Google OAuth:
+1. Get authorization URL: `http GET http://localhost:9090/v1/login/google/url`
+2. Redirect user to the returned URL
+3. After user authorizes, exchange code for JWT: `http POST http://localhost:9090/v1/login/google code="<authorization_code>"`
+
+### Microsoft OAuth:
+1. Get authorization URL: `http GET http://localhost:9090/v1/login/microsoft/url`
+2. Redirect user to the returned URL
+3. After user authorizes, exchange code for JWT: `http POST http://localhost:9090/v1/login/microsoft code="<authorization_code>"`
+
 ## Common HTTP requests (using HTTPIE)
 
-- `http POST http://localhost:9090/v1/users email="ryan@example.com" password="123456" confirmedPassword="123456"`
-- `http POST http://localhost:9090/v1/sessions email="ryan@example.com" password="123456"`
-- `http POST http://localhost:9090/v1/login/google code="<authorization_code>"`
-- `http POST http://localhost:9090/v1/login/microsoft code="<authorization_code>"`
-- `http GET http://localhost:9090/v1/user authorization:"token <jwt>"`
+### User Management:
+- Create user: `http POST http://localhost:9090/v1/users email="ryan@example.com" password="123456" confirmedPassword="123456"`
+- Login: `http POST http://localhost:9090/v1/sessions email="ryan@example.com" password="123456"`
+- Get user info: `http GET http://localhost:9090/v1/user authorization:"Bearer <jwt>"`
+
+### OAuth:
+- Get Google auth URL: `http GET http://localhost:9090/v1/login/google/url`
+- Exchange Google code: `http POST http://localhost:9090/v1/login/google code="<authorization_code>"`
+- Get Microsoft auth URL: `http GET http://localhost:9090/v1/login/microsoft/url`
+- Exchange Microsoft code: `http POST http://localhost:9090/v1/login/microsoft code="<authorization_code>"`

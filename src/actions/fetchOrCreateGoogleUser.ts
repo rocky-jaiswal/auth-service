@@ -7,7 +7,7 @@ import ServerError from '../errors/serverError'
 import CreateGoogleUserState from '../handlers/oauth/google/createGoogleUserState'
 
 const fetchOrCreateGoogleUser = async (
-  state: CreateGoogleUserState
+  state: CreateGoogleUserState,
 ): Promise<Either<Error, CreateGoogleUserState>> => {
   try {
     const userRepo = new UserRepository(db)
@@ -22,7 +22,7 @@ const fetchOrCreateGoogleUser = async (
 
     return Right(state)
   } catch (err) {
-    // TODO: Log this error
+    console.error(err)
     return Left(new ServerError('server error'))
   }
 }
